@@ -1,6 +1,5 @@
 import React from "react";
 import ReactStars from "react-rating-stars-component";
-import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { MdOutlineAccessTime, MdOutlineCalendarMonth } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { IoLocationOutline, IoSchoolOutline } from "react-icons/io5";
@@ -24,6 +23,7 @@ const ScholarshipsCard = ({ scholarship }) => {
   } = scholarship;
   const text = description;
   const slicedText = text.length > 150 ? text.slice(0, 150) + "..." : text;
+
   return (
     <div className="card group max-w-[460px] card-compact bg-base-100 shadow-xl  p-5">
       <div className="flex items-center gap-4">
@@ -46,7 +46,7 @@ const ScholarshipsCard = ({ scholarship }) => {
           </p>
         </div>
       </div>
-      <div className="card-body ">
+      <div className="card-body !p-0 mt-4">
         <h2 className="font-bold text-2xl text-[#0c281b]">{scholarshipName}</h2>
         <div className="flex gap-2">
           <p className="flex gap-2 items-center text-base w-[50%]">
@@ -103,4 +103,5 @@ const ScholarshipsCard = ({ scholarship }) => {
     </div>
   );
 };
+
 export default ScholarshipsCard;

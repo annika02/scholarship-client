@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import cardImage from "../../assets/New-Black-Yellow-and-White-Abstract-Photocentric-Modern-YouTube-Thumbnail-1.jpg";
-import scholarshipsBanner from "../../assets/pricing-breadcrumb-1.jpg";
+import cardImage from "../../assets/Screenshot 2025-05-19 192758.png";
+import scholarshipsBanner from "../../assets/download (1).jpg";
 import { SlCalender } from "react-icons/sl";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { IoLocationOutline } from "react-icons/io5";

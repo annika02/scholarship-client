@@ -23,6 +23,7 @@ const routes = [
       {
         index: true,
         element: <Home />,
+        loader: () => fetch("http://localhost:5000/"),
       },
       {
         path: "/all-scholarships",
@@ -31,6 +32,7 @@ const routes = [
             <AllScholarships />
           </PrivateRoute>
         ),
+        loader: () => fetch("http://localhost:5000/all-data"),
       },
       {
         path: "/login",
@@ -44,13 +46,12 @@ const routes = [
         path: "/scholarship-details/:id",
         element: (
           <PrivateRoute>
+            {" "}
             <ScholarshipsDetails />
           </PrivateRoute>
         ),
-        loader: async ({ params }) => {
-          // You can add data loading here
-          return fetch(`/api/scholarships/${params.id}`);
-        },
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/scholarship/${params.id}`),
       },
     ],
   },
