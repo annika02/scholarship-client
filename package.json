@@ -12,6 +12,8 @@
   "dependencies": {
     "firebase": "^11.7.3",
     "localforage": "^1.10.0",
+    "lottie-react": "^2.4.1",
+    "lottie-web": "^5.12.2",
     "match-sorter": "^8.0.1",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",

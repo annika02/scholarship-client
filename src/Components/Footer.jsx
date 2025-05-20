@@ -109,7 +109,7 @@ const Footer = () => {
 
       {/* Copyright Section */}
       <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
-        <p>© {new Date().getFullYear()} Your Company. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} ScholarshipHub. All rights reserved.</p>
       </div>
     </footer>
   );

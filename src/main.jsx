@@ -12,7 +12,7 @@ import AllScholarships from "./Pages/AllScholarshipsPage/AllScholarships";
 import ErrorPage from "./Pages/ErrorPage/ErrorPage"; // Recommended to add
 import DashboardLayout from "./Layout/DashboardLayout"; // Recommended for dashboard structure
 import AuthProvider from "./Context/AuthProvider";
-
+import PrivateRoute from "./Context/PrivateRoute";
 // Create routes configuration
 const routes = [
   {
@@ -26,7 +26,11 @@ const routes = [
       },
       {
         path: "/all-scholarships",
-        element: <AllScholarships />,
+        element: (
+          <PrivateRoute>
+            <AllScholarships />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/login",
@@ -38,7 +42,11 @@ const routes = [
       },
       {
         path: "/scholarship-details/:id",
-        element: <ScholarshipsDetails />,
+        element: (
+          <PrivateRoute>
+            <ScholarshipsDetails />
+          </PrivateRoute>
+        ),
         loader: async ({ params }) => {
           // You can add data loading here
           return fetch(`/api/scholarships/${params.id}`);
@@ -48,14 +56,8 @@ const routes = [
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
-    children: [
-      {
-        index: true,
-        element: <Dashboard />,
-      },
-      // Add more dashboard routes here
-    ],
+    element: <Dashboard />,
+    children: [],
   },
 ];
 
