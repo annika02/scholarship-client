@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useContext } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -11,11 +11,11 @@ import ScholarshipsDetails from "./Pages/ScholarshipsDetails/ScholarshipsDetails
 import AllScholarships from "./Pages/AllScholarshipsPage/AllScholarships";
 import ErrorPage from "./Pages/ErrorPage/ErrorPage"; // Recommended to add
 import DashboardLayout from "./Layout/DashboardLayout"; // Recommended for dashboard structure
-import AuthProvider from "./Context/AuthProvider";
+import AuthProvider, { AuthContext } from "./Context/AuthProvider";
 import PrivateRoute from "./Context/PrivateRoute";
 import AddScholarships from "./Pages/Dashboard/Admin/AddScholarships";
 import ManageScholarships from "./Pages/Dashboard/Admin/ManageScholarships";
-import AdminProfile from "./Pages/Dashboard/Admin/Profile";
+import Profile from "./Pages/Dashboard/Admin/Profile";
 import ManageApplications from "./Pages/Dashboard/Admin/ManageApplications";
 import AllUser from "./Pages/Dashboard/Admin/AllUser";
 import Review from "./Pages/ScholarshipsDetails/Review";
@@ -69,7 +69,7 @@ const routes = [
       // admin routes
       {
         path: "profile",
-        element: <AdminProfile />,
+        element: <Profile />,
         loader: () => fetch("http://localhost:5000/"),
       },
       {
