@@ -1,26 +1,47 @@
 import React, { useEffect } from "react";
-import Admin from "./Admin";
-import User from "./User";
-import Moderator from "./Moderator";
+import Admin from "./Admin/AdminDashboard";
+import User from "./User/User";
+import Moderator from "./Moderator/Moderator";
 import { useNavigate } from "react-router-dom";
+import useRole from "../../Hooks/useRole";
+import { toast } from "react-toastify";
+import Animation from "../../Components/Animation";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const user = false;
+  const { role, user, loader } = useRole();
+
   useEffect(() => {
-    if (!user) {
+    if (!loader && !user) {
+      toast.error("You need to login to access the dashboard");
       navigate("/login");
     }
-  }, []);
-  if (user === "admin") {
+  }, [loader, user, navigate]);
+
+  if (loader) {
+    return <Animation />;
+  }
+
+  if (role === "admin") {
     return <Admin />;
   }
-  if (user === "moderator") {
+
+  if (role === "moderator") {
     return <Moderator />;
   }
-  if (user === "user") {
+
+  if (role === "user") {
     return <User />;
   }
+
+  useEffect(() => {
+    if (!loader && user && !["admin", "moderator", "user"].includes(role)) {
+      toast.error("You are not authorized to access this page");
+      navigate("/");
+    }
+  }, [role, loader, user, navigate]);
+
+  return null;
 };
 
 export default Dashboard;

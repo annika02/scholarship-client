@@ -77,25 +77,25 @@ const Review = ({ scholarshipData }) => {
             count={5}
             size={28}
             isHalf={true}
-            value={review.ratings}
+            value={review?.ratings}
             edit={false}
             activeColor="#ffd700"
           />
           <div className="flex items-center gap-3">
             <img
               className="w-10 rounded-full"
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              alt=""
+              src={review?.image}
+              alt={review?.name}
             />
             <h2>{review.name}</h2>
             <p className="flex items-center gap-2 pl-3">
               {" "}
               <FaRegCalendarAlt />
-              {review.date}
+              {review?.date}
             </p>
           </div>
           <div>
-            <p className="">{review.review}</p>
+            <p className="">{review?.review}</p>
           </div>
         </div>
       ))}

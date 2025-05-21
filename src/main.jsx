@@ -13,6 +13,13 @@ import ErrorPage from "./Pages/ErrorPage/ErrorPage"; // Recommended to add
 import DashboardLayout from "./Layout/DashboardLayout"; // Recommended for dashboard structure
 import AuthProvider from "./Context/AuthProvider";
 import PrivateRoute from "./Context/PrivateRoute";
+import AddScholarships from "./Pages/Dashboard/Admin/AddScholarships";
+import ManageScholarships from "./Pages/Dashboard/Admin/ManageScholarships";
+import AdminProfile from "./Pages/Dashboard/Admin/Profile";
+import ManageApplications from "./Pages/Dashboard/Admin/ManageApplications";
+import AllUser from "./Pages/Dashboard/Admin/AllUser";
+import Review from "./Pages/ScholarshipsDetails/Review";
+import ManageReviews from "./Pages/Dashboard/Admin/ManageReviews";
 // Create routes configuration
 const routes = [
   {
@@ -58,7 +65,34 @@ const routes = [
   {
     path: "/dashboard",
     element: <Dashboard />,
-    children: [],
+    children: [
+      // admin routes
+      {
+        path: "profile",
+        element: <AdminProfile />,
+        loader: () => fetch("http://localhost:5000/"),
+      },
+      {
+        path: "add-scholarships",
+        element: <AddScholarships />,
+      },
+      {
+        path: "manage-scholarships",
+        element: <ManageScholarships />,
+      },
+      {
+        path: "manage-applications",
+        element: <ManageApplications />,
+      },
+      {
+        path: "manage-users",
+        element: <AllUser />,
+      },
+      {
+        path: "manage-reviews",
+        element: <ManageReviews />,
+      },
+    ],
   },
 ];
 
