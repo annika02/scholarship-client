@@ -1,7 +1,12 @@
 import { StrictMode, useContext } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+
 import Root from "./Layout/Root";
 import Home from "./Pages/HomePage/Home";
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -68,9 +73,13 @@ const routes = [
     children: [
       // admin routes
       {
+        path: "/dashboard",
+        element: <Navigate replace to={"profile"} />,
+      },
+      {
+        index: true,
         path: "profile",
         element: <Profile />,
-        loader: () => fetch("http://localhost:5000/"),
       },
       {
         path: "add-scholarships",
@@ -103,6 +112,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <RouterProvider router={router} />
+      <ToastContainer />
     </AuthProvider>
   </StrictMode>
 );

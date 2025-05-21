@@ -47,8 +47,8 @@ const AllUser = () => {
   };
 
   return (
-    <section className="max-w-screen-lg mx-auto py-14">
-      <div className="overflow-x-auto">
+    <section className=" bg-[#f2f8f1] h-full py-14">
+      <div className="overflow-x-auto mx-auto max-w-screen-lg">
         <table className="table text-center">
           {/* head */}
           <thead className="text-center">

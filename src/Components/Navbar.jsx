@@ -19,7 +19,7 @@ const Navbar = () => {
   const navLinks = [
     { path: "/", label: "Home", end: true },
     { path: "/all-scholarships", label: "All Scholarships" },
-    { path: "/dashboard/profile", label: "Dashboard" },
+    { path: "/dashboard", label: "Dashboard" },
   ];
 
   const renderNavLink = ({ path, label, end = false }) => (
