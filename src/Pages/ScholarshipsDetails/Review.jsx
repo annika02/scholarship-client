@@ -3,15 +3,17 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import ReactStars from "react-rating-stars-component";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../Context/AuthProvider";
-const Review = ({ review }) => {
+const Review = ({ scholarshipData }) => {
   const { user } = useContext(AuthContext);
   const [ratings, setRatings] = useState(0);
-  const handleRating = (newRating) => {
-    setRatings(newRating);
-  };
-  const date = new Date();
+  const handleRating = (newRating) => setRatings(newRating);
+  const { date, image, name, rating, review } = scholarshipData.reviews;
+  console.log(scholarshipData.reviews.ratings);
+  // post review
   const handleReview = (e) => {
     e.preventDefault();
+
+    const date = new Date().toLocaleDateString();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
     const newData = { ...data, ratings, image: user.photoURL, date };
@@ -20,7 +22,7 @@ const Review = ({ review }) => {
       toast.error("Please select a minimum rating");
       return;
     }
-    fetch(`http://localhost:5000/add-review/${review?.postId}`, {
+    fetch(`http://localhost:5000/add-review/${scholarshipData._id}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(newData),
@@ -30,8 +32,9 @@ const Review = ({ review }) => {
         if (data.insertedId) {
           toast.success("Review added successfully");
         }
-      });
-    // console.log(date);
+      })
+      // console.log(date);
+      .catch((err) => toast.error("Something went wrong"));
     e.target.reset();
   };
   return (
@@ -67,96 +70,35 @@ const Review = ({ review }) => {
           Submit
         </button>
       </form>
-      <div className="border-2 p-5 bg-white rounded-xl space-y-3">
-        <ReactStars
-          count={5}
-          size={28}
-          isHalf={true}
-          value={4.5}
-          edit={false}
-          activeColor="#ffd700"
-        />
-        <div className="flex items-center gap-3">
-          <img
-            className="w-10 rounded-full"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-            alt=""
+
+      {scholarshipData.reviews.map((review) => (
+        <div className="border-2 p-5 bg-white rounded-xl space-y-3">
+          <ReactStars
+            count={5}
+            size={28}
+            isHalf={true}
+            value={review.ratings}
+            edit={false}
+            activeColor="#ffd700"
           />
-          <h2>Ariful Islam</h2>
-          <p className="flex items-center gap-2 pl-3">
-            {" "}
-            <FaRegCalendarAlt />
-            25-12-2025
-          </p>
+          <div className="flex items-center gap-3">
+            <img
+              className="w-10 rounded-full"
+              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+              alt=""
+            />
+            <h2>{review.name}</h2>
+            <p className="flex items-center gap-2 pl-3">
+              {" "}
+              <FaRegCalendarAlt />
+              {review.date}
+            </p>
+          </div>
+          <div>
+            <p className="">{review.review}</p>
+          </div>
         </div>
-        <div>
-          <p className="">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum
-            maxime, nulla nihil voluptas obcaecati ratione doloremque unde. Sunt
-            modi quia unde. Animi a minima nostrum ut quos iusto quidem laborum?
-          </p>
-        </div>
-      </div>
-      <div className="border-2 p-5 bg-white rounded-xl space-y-3">
-        <ReactStars
-          count={5}
-          size={28}
-          isHalf={true}
-          value={4.5}
-          edit={false}
-          activeColor="#ffd700"
-        />
-        <div className="flex items-center gap-3">
-          <img
-            className="w-10 rounded-full"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-            alt=""
-          />
-          <h2>Ariful Islam</h2>
-          <p className="flex items-center gap-2 pl-3">
-            {" "}
-            <FaRegCalendarAlt />
-            25-12-2025
-          </p>
-        </div>
-        <div>
-          <p className="">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum
-            maxime, nulla nihil voluptas obcaecati ratione doloremque unde. Sunt
-            modi quia unde. Animi a minima nostrum ut quos iusto quidem laborum?
-          </p>
-        </div>
-      </div>
-      <div className="border-2 p-5 bg-white rounded-xl space-y-3">
-        <ReactStars
-          count={5}
-          size={28}
-          isHalf={true}
-          value={4.5}
-          edit={false}
-          activeColor="#ffd700"
-        />
-        <div className="flex items-center gap-3">
-          <img
-            className="w-10 rounded-full"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-            alt=""
-          />
-          <h2>Ariful Islam</h2>
-          <p className="flex items-center gap-2 pl-3">
-            {" "}
-            <FaRegCalendarAlt />
-            25-12-2025
-          </p>
-        </div>
-        <div>
-          <p className="">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum
-            maxime, nulla nihil voluptas obcaecati ratione doloremque unde. Sunt
-            modi quia unde. Animi a minima nostrum ut quos iusto quidem laborum?
-          </p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

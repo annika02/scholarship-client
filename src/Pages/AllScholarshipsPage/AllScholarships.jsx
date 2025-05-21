@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-
 import ScholarshipsCard from "../HomePage/ScholarshipCard";
 import OtherPageBanner from "../../Hooks/OtherPageBanner";
 import bgImage from "../../assets/download (2).jpg";
 import { useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
-
 const AllScholarships = () => {
   const loaderData = useLoaderData();
   const [data, setData] = useState(loaderData);
   const [searchCategory, setSearchKey] = useState("");
 
+  const [isAvailable, setIsAvailable] = useState(true);
   const handleSearch = (e) => {
     const searchQuery = e.target.value.toLowerCase(); //
     if (!searchQuery) {
@@ -24,6 +23,7 @@ const AllScholarships = () => {
     const newData = loaderData.filter((d) =>
       d[searchCategory]?.toLowerCase().includes(searchQuery)
     );
+    setIsAvailable(newData.length > 0);
     setData(newData);
   };
 
@@ -62,6 +62,12 @@ const AllScholarships = () => {
             <ScholarshipsCard scholarship={d} key={d._id} />
           ))}
         </div>
+
+        {isAvailable || (
+          <div className="text-3xl py-10 font-bold text-center">
+            No Scholarships Available
+          </div>
+        )}
       </section>
     </>
   );
