@@ -93,7 +93,7 @@ const ManageScholarships = () => {
   };
 
   return (
-    <section className="bg-[#f2f8f1] py-14 h-full">
+    <section className="bg-[#f1f2f8] py-14 h-full">
       <div className="overflow-x-auto">
         <table className="table text-center">
           <thead>
@@ -372,7 +372,7 @@ const ManageScholarships = () => {
                         </div>
                       </div>
                       <div className="flex gap-5 pt-4 justify-center">
-                        <button className="btn transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white px-7">
+                        <button className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7">
                           Update{" "}
                         </button>
                         <label

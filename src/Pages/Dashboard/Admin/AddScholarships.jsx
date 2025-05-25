@@ -66,7 +66,7 @@ const AddScholarships = () => {
       );
   };
   return (
-    <section className="bg-[#f2f8f1] h-full py-5 md:py-14">
+    <section className="bg-[#f1f2f8] h-full py-5 md:py-14">
       <div className="max-w-screen-lg  mx-auto">
         <form
           onSubmit={handleSubmit}
@@ -267,7 +267,7 @@ const AddScholarships = () => {
             </div>
           </div>
           <div className="flex pt-4 justify-center">
-            <button className="btn transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white px-7">
+            <button className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7">
               Add Scholarship
             </button>
           </div>

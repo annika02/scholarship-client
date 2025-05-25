@@ -68,10 +68,10 @@ const ScholarshipsCard = ({ scholarship }) => {
             {applicationDeadline}
           </p>
         </div>
-        <p className="text-[#394630]">{slicedText}</p>
+        <p className="text-[#303846]">{slicedText}</p>
         <hr />
         <div className="card-actions relative justify-between">
-          <p className="text-2xl font-bold text-[#14452F]">
+          <p className="text-2xl font-bold text-[#143145]">
             ${applicationFees}
           </p>
           <div>
@@ -80,7 +80,7 @@ const ScholarshipsCard = ({ scholarship }) => {
               className="max-w-max max-h-max"
             >
               {" "}
-              <button className="btn -translate-x-5 transition-all duration-300 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white">
+              <button className="btn -translate-x-5 transition-all duration-300 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white">
                 View Details
               </button>
             </Link>

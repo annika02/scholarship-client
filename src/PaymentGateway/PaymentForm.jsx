@@ -78,7 +78,7 @@ const PaymentForm = ({ price, setPaymentSuccess }) => {
       />
       <div className="flex mt-5 justify-center items-center gap-5">
         <button
-          className="btn transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white px-7"
+          className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7"
           type="submit"
           disabled={!stripe}
         >

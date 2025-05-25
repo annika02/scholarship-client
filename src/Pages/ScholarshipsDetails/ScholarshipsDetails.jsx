@@ -107,7 +107,7 @@ const ScholarshipsDetails = () => {
         image={scholarshipsBanner}
         heading={"Your Scholarship at a Glance"}
       />
-      <section className="bg-[#f2f8f1] py-20">
+      <section className="bg-[#f1f2f8] py-20">
         <div className="bg-white max-w-max mx-auto border-2 shadow-xl rounded-lg overflow-hidden  p-10 px-16 gap-10 flex">
           <div className=" text-center flex flex-col max-w-36  items-center">
             <img
@@ -180,7 +180,7 @@ const ScholarshipsDetails = () => {
             <div className="flex justify-end">
               <label
                 htmlFor={`my_modal_${paymentSuccess ? "7" : "6"}`}
-                className="btn mt-4  transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white ml-1"
+                className="btn mt-4  transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white ml-1"
               >
                 Apply Now
               </label>
@@ -195,7 +195,7 @@ const ScholarshipsDetails = () => {
               <button
                 onClick={() => setToggle(true)}
                 className={`transition duration-300 px-3 py-2 rounded-full ${
-                  toggle && "bg-[#185137] text-white"
+                  toggle && "bg-[#1a4c58] text-white"
                 }`}
               >
                 Description
@@ -203,7 +203,7 @@ const ScholarshipsDetails = () => {
               <button
                 onClick={() => setToggle(false)}
                 className={`transition duration-300 px-3 py-2 rounded-full ${
-                  toggle || "bg-[#185137] text-white"
+                  toggle || "bg-[#1a4c58] text-white"
                 }`}
               >
                 Reviews
@@ -474,7 +474,7 @@ const ScholarshipsDetails = () => {
             </label>
           </div>
           <div className="flex justify-center items-center gap-5 !mt-7">
-            <button className="btn transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white px-7">
+            <button className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7">
               Submit
             </button>
             <label

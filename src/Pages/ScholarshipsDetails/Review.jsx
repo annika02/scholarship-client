@@ -48,7 +48,7 @@ const Review = ({ scholarshipData }) => {
                         activeColor="#ffd700" />
                 </div>
                 <textarea required placeholder='Give a review' className='w-full rounded-lg h-20 p-3' name="review" id=""></textarea>
-                <button className="btn transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white px-7">Submit</button>
+                <button className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7">Submit</button>
 
             </form> */}
       {scholarshipData.reviews.map((review) => (

@@ -117,7 +117,7 @@ const ManageApplications = () => {
     setData(newData);
   };
   return (
-    <section className="bg-[#f2f8f1] h-full py-14">
+    <section className="bg-[#f1f2f8] h-full py-14">
       <div className="flex  justify-end px-5 md:px-10 pb-7">
         <div className="flex gap-7 border-2 bg-white px-5 py-3 rounded-full items-center">
           <h2 className="text-xl">Sort Data</h2>
@@ -282,7 +282,7 @@ const ManageApplications = () => {
               </div>
             </div>
             <div className="flex gap-4 mt-7 justify-center items-center">
-              <button className="btn transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white px-7">
+              <button className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7">
                 Send
               </button>
               <label
@@ -391,7 +391,7 @@ const ManageApplications = () => {
             <label
               onClick={() => handleApprove(modalData._id, modalData)}
               htmlFor="my_modal_9"
-              className="btn transition duration-300 hover:bg-[#7CFF77] hover:text-[#14452F] bg-[#185137] text-white px-7"
+              className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7"
             >
               Approve
             </label>

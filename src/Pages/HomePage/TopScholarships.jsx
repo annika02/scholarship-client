@@ -4,11 +4,11 @@ import ScholarshipsCard from "./ScholarshipCard";
 
 const TopScholarships = ({ data }) => {
   return (
-    <div className=" py-20 bg-[#f2f8f1]">
+    <div className=" py-20 bg-[#f1f2f8]">
       <div>
         <h2 className="text-5xl font-bold text-center ">
           Scholarships That{" "}
-          <span className="text-[#14452F] underline">Shine!</span>
+          <span className="text-[#143145] underline">Shine!</span>
         </h2>
         <p className="text-center max-w-2xl mx-auto pt-3 md:pt-5">
           Explore the best scholarships to fund your education. Find
@@ -24,7 +24,7 @@ const TopScholarships = ({ data }) => {
       <div className="grid justify-center">
         <Link to={"/all-scholarships"}>
           {" "}
-          <button className="btn mt-11 bg-[#185137] text-white hover:bg-[#238358]">
+          <button className="btn mt-11 bg-[#1a4c58] text-white hover:bg-[#96d7ff]">
             View All Scholarships
           </button>
         </Link>

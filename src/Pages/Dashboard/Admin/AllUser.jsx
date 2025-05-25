@@ -51,7 +51,7 @@ const AllUser = () => {
   };
 
   return (
-    <section className=" bg-[#f2f8f1] h-full py-14">
+    <section className=" bg-[#f1f2f8] h-full py-14">
       <div className="overflow-x-auto mx-auto max-w-screen-lg">
         <table className="table text-center">
           {/* head */}

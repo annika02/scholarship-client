@@ -20,7 +20,7 @@ const Charts = () => {
     { name: "Reviews", count: reviews.length },
   ];
   return (
-    <div className="flex items-center justify-center bg-[#f2f8f1] h-full flex-col gap-10 py-14">
+    <div className="flex items-center justify-center bg-[#f1f2f8] h-full flex-col gap-10 py-14">
       <h2 className="text-3xl text-center font-bold">
         A brief analytics of the application data
       </h2>

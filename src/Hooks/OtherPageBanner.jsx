@@ -11,7 +11,7 @@ const OtherPageBanner = ({ image, heading }) => {
       }}
       className="max-h-max w-full"
     >
-      <div className="bg-[#14452f] bg-opacity-90 ">
+      <div className="bg-[#143145] bg-opacity-90 ">
         <h1 className=" text-6xl font-bold text-white  mx-auto text-center py-24 max-w-screen-sm">
           {heading}
         </h1>

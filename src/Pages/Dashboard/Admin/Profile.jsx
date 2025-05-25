@@ -13,7 +13,7 @@ const Profile = () => {
       .catch((err) => toast.error("Profile loading failed"));
   }, [user?.email]);
   return (
-    <section className="bg-[#f2f8f1] h-full py-14">
+    <section className="bg-[#f1f2f8] h-full py-14">
       <div className="max-w-screen-lg mx-auto">
         <div className="relative mb-28">
           {/* Background Image */}
