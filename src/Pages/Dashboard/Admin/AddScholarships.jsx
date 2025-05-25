@@ -36,19 +36,27 @@ const AddScholarships = () => {
       .then((res) => {
         const newData = {
           ...data,
+          applicationFees: parseInt(data.applicationFees),
+          serviceCharge: parseInt(data.serviceCharge),
+          tuitionFees: parseInt(data.tuitionFees),
           universityImage: res.data.url,
+          universityWorldRank: parseInt(data.universityWorldRank),
           scholarshipPostDate: newDate,
           postedUserEmail: user.email,
         };
-        fetch(`http://localhost:5000/add-scholarship?email=${user?.email}`, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(newData),
-        })
+        fetch(
+          `https://scholarship-server-beta.vercel.app/add-scholarship?email=${user?.email}`,
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(newData),
+          }
+        )
           .then((res) => res.json())
           .then((newData) => {
             if (newData.insertedId) {
               toast.success("Scholarship added successfully");
+              e.target.reset();
             }
           })
           .catch((err) => toast.error("Failed to add scholarship Data"));
@@ -56,20 +64,19 @@ const AddScholarships = () => {
       .catch((err) =>
         toast.error("Failed to upload image. Please try again later")
       );
-    e.target.reset();
   };
   return (
-    <section className="bg-[#f2f8f1] h-full py-14">
+    <section className="bg-[#f2f8f1] h-full py-5 md:py-14">
       <div className="max-w-screen-lg  mx-auto">
         <form
           onSubmit={handleSubmit}
           className="flex gap-5 flex-col justify-center"
           action=""
         >
-          <div className="flex gap-5 justify-center">
-            <div className="flex flex-col gap-5">
+          <div className="grid justify-center items-center md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div className="flex mx-auto max-w-max flex-col gap-5">
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Scholarship Title</span>
                 </div>
                 <input
@@ -81,7 +88,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">University Name</span>
                 </div>
                 <input
@@ -93,7 +100,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">University Logo</span>
                 </div>
                 <input
@@ -105,7 +112,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Country</span>
                 </div>
                 <input
@@ -117,7 +124,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">City</span>
                 </div>
                 <input
@@ -129,9 +136,9 @@ const AddScholarships = () => {
                 />
               </label>
             </div>
-            <div className="flex flex-col gap-5">
+            <div className="flex mx-auto max-w-max  flex-col gap-5">
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Subject category</span>
                 </div>
                 <select
@@ -149,7 +156,7 @@ const AddScholarships = () => {
                 </select>
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Scholarship category</span>
                 </div>
                 <select
@@ -167,7 +174,7 @@ const AddScholarships = () => {
                 </select>
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Degree </span>
                 </div>
                 <select
@@ -185,7 +192,7 @@ const AddScholarships = () => {
                 </select>
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Tuition fees</span>
                 </div>
                 <input
@@ -197,7 +204,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Application Fee</span>
                 </div>
                 <input
@@ -209,9 +216,9 @@ const AddScholarships = () => {
                 />
               </label>
             </div>
-            <div className="flex flex-col gap-5">
+            <div className="flex mx-auto max-w-max flex-col gap-5">
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Service Charge</span>
                 </div>
                 <input
@@ -223,7 +230,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Application Deadline</span>
                 </div>
                 <input
@@ -235,7 +242,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">World Rank</span>
                 </div>
                 <input
@@ -247,7 +254,7 @@ const AddScholarships = () => {
                 />
               </label>
               <label className="form-control w-[300px]">
-                <div className="label">
+                <div className="label max-w-max">
                   <span className="label-text">Description</span>
                 </div>
                 <textarea
@@ -269,4 +276,5 @@ const AddScholarships = () => {
     </section>
   );
 };
+
 export default AddScholarships;

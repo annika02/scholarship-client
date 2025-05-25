@@ -7,16 +7,21 @@ const ManageReviews = () => {
   const { user } = useContext(AuthContext);
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/all-reviews?email=${user.email}`)
+    fetch(
+      `https://scholarship-server-beta.vercel.app/all-reviews?email=${user.email}`
+    )
       .then((res) => res.json())
       .then((data) => setReviews(data))
       .catch((err) => toast.error("Something went wrong"));
   }, [user]);
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/delete-review/${id}?email=${user.email}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `https://scholarship-server-beta.vercel.app/delete-review/${id}?email=${user.email}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount) {
@@ -28,10 +33,10 @@ const ManageReviews = () => {
         }
       });
   };
-  console.log(reviews);
+
   return (
     <section className="bg-[#f2f8f1] h-full  py-5">
-      <div className="grid gap-y-4 justify-center mx-auto grid-cols-3">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-y-4 justify-center mx-auto xl:grid-cols-3">
         {reviews.map((review) => (
           <div className="mx-auto card card-compact bg-base-100 w-96 shadow-xl">
             <div className="flex p-5 items-center">

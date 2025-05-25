@@ -6,7 +6,9 @@ const AllUser = () => {
   const { user } = useContext(AuthContext);
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/all-users/?email=${user?.email}`)
+    fetch(
+      `https://scholarship-server-beta.vercel.app/all-users/?email=${user?.email}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -17,9 +19,12 @@ const AllUser = () => {
   }, [user]);
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/delete-user/${id}?email=${user?.email}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `https://scholarship-server-beta.vercel.app/delete-user/${id}?email=${user?.email}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         toast.success("User deleted successfully");
@@ -30,9 +35,8 @@ const AllUser = () => {
   };
 
   const handleRole = (e, id) => {
-    console.log(e.target.value, id);
     fetch(
-      `http://localhost:5000/update-role/${id}?role=${e.target.value}&email=${user?.email}&`,
+      `https://scholarship-server-beta.vercel.app/update-role/${id}?role=${e.target.value}&email=${user?.email}&`,
       {
         method: "PATCH",
       }
@@ -62,11 +66,11 @@ const AllUser = () => {
           <tbody>
             {/* row 1 */}
             {data.map((item) => (
-              <tr>
+              <tr key={item._id}>
                 <td>
-                  <h2 className="font-bold text-lg">{item?.userName}</h2>{" "}
+                  <h2 className="font-bold text-lg">{item?.userName}</h2>
                 </td>
-                <td className="text-base">{item.email}</td>
+                <td className="text-base">{item.userEmail}</td>
                 <td className="text-base">
                   <select
                     onChange={(e) => handleRole(e, item._id)}

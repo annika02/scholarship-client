@@ -4,7 +4,7 @@ import image1 from "../../assets/download (1).jpg";
 import image2 from "../../assets/download.jpg";
 const Banner = () => {
   return (
-    <div className="bg-[#0b3824] relative overflow-hidden py-24">
+    <div className="bg-[#0c5b7d] relative overflow-hidden py-24">
       <div
         style={{
           backgroundImage: `url(${bgImg})`,

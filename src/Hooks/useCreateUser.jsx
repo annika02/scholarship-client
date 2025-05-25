@@ -5,7 +5,7 @@ const useCreateUser = () => {
   const [error, setError] = useState("");
 
   const createUser = (user) => {
-    fetch("http://localhost:5000/create-user", {
+    fetch("https://scholarship-server-beta.vercel.app/create-user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),

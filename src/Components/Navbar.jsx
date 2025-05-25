@@ -1,149 +1,119 @@
 import React, { useContext } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { AuthContext } from "../Context/AuthProvider";
+import { Link, NavLink } from "react-router-dom";
+import AuthProvider, { AuthContext } from "../Context/AuthProvider";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
-  const location = useLocation();
-
-  const handleLogout = async () => {
-    try {
-      await signOutUser();
-      toast.success("Signed out successfully");
-    } catch (error) {
-      toast.error("Error signing out");
-    }
+  const logOut = () => {
+    signOutUser().then((res) => toast.success("Sign Out Successful"));
   };
-
-  const navLinks = [
-    { path: "/", label: "Home", end: true },
-    { path: "/all-scholarships", label: "All Scholarships" },
-    { path: "/dashboard", label: "Dashboard" },
-  ];
-
-  const renderNavLink = ({ path, label, end = false }) => (
-    <NavLink
-      key={path}
-      to={path}
-      end={end}
-      className={({ isActive }) => `
-        px-4 py-2 rounded-lg transition-all duration-300
-        ${
-          isActive
-            ? "bg-emerald-800 text-white font-medium shadow-inner"
-            : "text-gray-800 hover:bg-emerald-50 hover:text-emerald-800"
-        }
-      `}
-    >
-      {label}
-    </NavLink>
+  const links = (
+    <>
+      <NavLink
+        className={"px-6 py-1 text-[#0c281b] text-base   rounded-xl"}
+        to={"/"}
+      >
+        Home
+      </NavLink>
+      <NavLink
+        className={"px-6 py-1 text-[#0c281b] text-base   rounded-xl"}
+        to={"/all-scholarships"}
+      >
+        All Scholarship
+      </NavLink>
+      <NavLink
+        className={"px-6 py-1 text-[#0c281b] text-base   rounded-xl"}
+        to={"/dashboard"}
+      >
+        Dashboard
+      </NavLink>
+    </>
   );
-
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white shadow-md border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Left side - Logo and mobile menu */}
-          <div className="flex items-center">
-            {/* Mobile menu button */}
-            <div className="lg:hidden mr-2">
-              <button
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
-                aria-label="Main menu"
+    <div className="z-50 w-full top-0 bg-white sticky">
+      <div
+        className={`py-3 mx-auto navbar max-w-screen-2xl lg:px-10 bg-base-100`}
+      >
+        <div className="navbar-start">
+          <div className="dropdown">
+            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h8m-8 6h16"
+                />
+              </svg>
             </div>
-
-            {/* Logo */}
-            <Link to="/" className="flex-shrink-0 flex items-center group">
-              <img
-                src="/logo.png"
-                alt="ScholarshipHub Logo"
-                className="h-8 w-auto transition-transform group-hover:scale-105"
-              />
-              <span className="ml-2 text-xl font-semibold text-gray-900 hidden sm:block">
-                ScholarshipHub
-              </span>
-            </Link>
-
-            {/* Desktop navigation */}
-            <div className="hidden lg:ml-8 lg:flex lg:space-x-2">
-              {navLinks.map(renderNavLink)}
-            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow gap-1"
+            >
+              {links}
+            </ul>
           </div>
-
-          {/* Right side - User actions */}
-          <div className="flex items-center">
-            {user ? (
-              <div className="ml-4 relative">
-                <div className="flex items-center space-x-4">
-                  <div className="relative">
-                    <button
-                      className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-                      aria-label="User menu"
-                    >
-                      <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-emerald-100">
-                        <img
-                          className="h-full w-full object-cover"
-                          src={
-                            user.photoURL ||
-                            "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-                          }
-                          alt={user.displayName || "User avatar"}
-                        />
-                      </div>
-                    </button>
+          <div>
+            <Link to={"/"} className="flex items-center gap-2">
+              <img width={"40px"} src="/logo.png" alt="logo" />{" "}
+            </Link>
+          </div>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">{links}</ul>
+        </div>
+        <div className="navbar-end relative">
+          {user ? (
+            <div className="flex-none">
+              <div className="dropdown dropdown-hover dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className="w-10 rounded-full">
+                    <img
+                      alt={user?.displayName}
+                      src={
+                        user?.photoURL ||
+                        "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
+                      }
+                    />
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="text-sm font-medium text-gray-700 hover:text-emerald-600 transition-colors duration-200"
-                  >
-                    Sign out
-                  </button>
                 </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] pt-3 w-40 p-2 shadow-lg"
+                >
+                  <li className="font-medium">
+                    <a>{user?.displayName}</a>
+                  </li>
+                  <li onClick={logOut} className="text-red-500 font-medium">
+                    <a>Logout</a>
+                  </li>
+                </ul>
               </div>
-            ) : (
-              <NavLink
-                to="/register"
-                className={({ isActive }) => `
-                  ml-4 px-4 py-2 rounded-md shadow-sm text-sm font-medium
-                  transition-colors duration-200
-                  ${
-                    isActive
-                      ? "bg-emerald-700 text-white"
-                      : "bg-emerald-600 text-white hover:bg-emerald-700"
-                  }
-                `}
+            </div>
+          ) : (
+            <div className="navbar-end max-w-max lg:flex">
+              <Link
+                to={"/register"}
+                className="btn  hover:bg-[#0c5b7d] bg-[#1a4c58] text-white text-base"
               >
                 Register
-              </NavLink>
-            )}
-          </div>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Mobile menu */}
-      <div className="lg:hidden">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {navLinks.map(renderNavLink)}
-        </div>
-      </div>
-    </nav>
+    </div>
   );
 };
 

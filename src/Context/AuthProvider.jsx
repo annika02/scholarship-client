@@ -6,59 +6,55 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import React, { useEffect, useState, createContext } from "react";
+import React, { useEffect, useState } from "react";
+import { createContext } from "react";
+export const AuthContext = createContext();
+const provider = new GoogleAuthProvider();
 import auth from "../Firebase/firebase.config";
-
-// Create and export context
-export const AuthContext = createContext(null); // Explicitly initialized with null
-
 const AuthProvider = ({ children }) => {
   const [loader, setLoader] = useState(true);
   const [user, setUser] = useState(null);
 
-  // Auth operations with error handling
-  const authOperations = {
-    register: (email, password) =>
-      handleAuthOp(() => createUserWithEmailAndPassword(auth, email, password)),
-    login: (email, password) =>
-      handleAuthOp(() => signInWithEmailAndPassword(auth, email, password)),
-    signInWithGoogle: () =>
-      handleAuthOp(() => {
-        const provider = new GoogleAuthProvider();
-        return signInWithPopup(auth, provider);
-      }),
-    signOutUser: () => handleAuthOp(() => signOut(auth)),
-  };
-
-  // Unified auth operation handler
-  const handleAuthOp = async (operation) => {
+  const register = (email, password) => {
     setLoader(true);
-    try {
-      return await operation();
-    } catch (error) {
-      setLoader(false);
-      throw error;
-    } finally {
-      setLoader(false);
-    }
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+  const login = (email, password) => {
+    setLoader(true);
+    return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Auth state observer
+  const signInWithGoogle = () => {
+    setLoader(true);
+    return signInWithPopup(auth, provider);
+  };
+
+  const signOutUser = () => {
+    setLoader(true);
+    return signOut(auth);
+  };
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unSubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
       setLoader(false);
     });
-    return unsubscribe;
+    return () => unSubscribe();
   }, []);
 
-  // Context value
   const authInfo = {
     user,
     loader,
-    ...authOperations,
+    setUser,
+    setLoader,
+    register,
+    login,
+    signInWithGoogle,
+    signOutUser,
   };
-
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

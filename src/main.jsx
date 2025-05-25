@@ -1,4 +1,4 @@
-import { StrictMode, useContext } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import {
@@ -6,7 +6,6 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-
 import Root from "./Layout/Root";
 import Home from "./Pages/HomePage/Home";
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -14,37 +13,45 @@ import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
 import ScholarshipsDetails from "./Pages/ScholarshipsDetails/ScholarshipsDetails";
 import AllScholarships from "./Pages/AllScholarshipsPage/AllScholarships";
-import ErrorPage from "./Pages/ErrorPage/ErrorPage"; // Recommended to add
-import DashboardLayout from "./Layout/DashboardLayout"; // Recommended for dashboard structure
-import AuthProvider, { AuthContext } from "./Context/AuthProvider";
+import AuthProvider from "./Context/AuthProvider";
+import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./Context/PrivateRoute";
 import AddScholarships from "./Pages/Dashboard/Admin/AddScholarships";
 import ManageScholarships from "./Pages/Dashboard/Admin/ManageScholarships";
 import Profile from "./Pages/Dashboard/Admin/Profile";
 import ManageApplications from "./Pages/Dashboard/Admin/ManageApplications";
 import AllUser from "./Pages/Dashboard/Admin/AllUser";
-import Review from "./Pages/ScholarshipsDetails/Review";
 import ManageReviews from "./Pages/Dashboard/Admin/ManageReviews";
-// Create routes configuration
-const routes = [
+import AdminRoute from "./Context/AdminRoute";
+import AuthorizedRoute from "./Context/AuthorizedRoute";
+import MyApplication from "./Pages/Dashboard/User/MyApplication";
+import MyReviews from "./Pages/Dashboard/User/MyReviews";
+import Charts from "./Pages/Dashboard/Admin/Charts";
+import ErrorPage from "./Pages/ErrorPage/ErrorPage";
+
+const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    errorElement: <ErrorPage />, // Add error handling
     children: [
       {
-        index: true,
+        path: "/",
         element: <Home />,
-        loader: () => fetch("http://localhost:5000/"),
+        loader: () => fetch("https://scholarship-server-beta.vercel.app/"),
       },
       {
         path: "/all-scholarships",
-        element: (
-          <PrivateRoute>
-            <AllScholarships />
-          </PrivateRoute>
-        ),
-        loader: () => fetch("http://localhost:5000/all-data"),
+        element: <AllScholarships />,
+        loader: () =>
+          fetch("https://scholarship-server-beta.vercel.app/all-data"),
+      },
+      {
+        path: "/scholarship-details/:id",
+        element: <ScholarshipsDetails />,
+        loader: ({ params }) =>
+          fetch(
+            `https://scholarship-server-beta.vercel.app/scholarship/${params.id}`
+          ),
       },
       {
         path: "/login",
@@ -54,22 +61,15 @@ const routes = [
         path: "/register",
         element: <Register />,
       },
-      {
-        path: "/scholarship-details/:id",
-        element: (
-          <PrivateRoute>
-            {" "}
-            <ScholarshipsDetails />
-          </PrivateRoute>
-        ),
-        loader: ({ params }) =>
-          fetch(`http://localhost:5000/scholarship/${params.id}`),
-      },
     ],
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
     children: [
       // admin routes
       {
@@ -79,40 +79,98 @@ const routes = [
       {
         index: true,
         path: "profile",
-        element: <Profile />,
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
       },
       {
         path: "add-scholarships",
-        element: <AddScholarships />,
+        element: (
+          <AuthorizedRoute>
+            <AddScholarships />
+          </AuthorizedRoute>
+        ),
       },
       {
         path: "manage-scholarships",
-        element: <ManageScholarships />,
+        element: (
+          <AuthorizedRoute>
+            <ManageScholarships />
+          </AuthorizedRoute>
+        ),
       },
       {
         path: "manage-applications",
-        element: <ManageApplications />,
+        element: (
+          <AuthorizedRoute>
+            <ManageApplications />
+          </AuthorizedRoute>
+        ),
       },
       {
         path: "manage-users",
-        element: <AllUser />,
+        element: (
+          <AdminRoute>
+            <AllUser />
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-reviews",
-        element: <ManageReviews />,
+        element: (
+          <AuthorizedRoute>
+            <ManageReviews />
+          </AuthorizedRoute>
+        ),
+      },
+      {
+        path: "analytics",
+        element: (
+          <AdminRoute>
+            <Charts />
+          </AdminRoute>
+        ),
+        loader: () =>
+          fetch(
+            "https://scholarship-server-beta.vercel.app/all-collections-data"
+          ),
+      },
+      // user route
+      {
+        path: "my-application/:id",
+        element: (
+          <PrivateRoute>
+            <MyApplication />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "my-reviews/:id",
+        element: (
+          <PrivateRoute>
+            <MyReviews />
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(
+            `https://scholarship-server-beta.vercel.app/my-review/${params.id}`
+          ),
       },
     ],
   },
-];
+  {
+    path: "*",
+    element: <ErrorPage></ErrorPage>,
+  },
+]);
 
-const router = createBrowserRouter(routes);
-
-// Render the app
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <AuthProvider>
+  <AuthProvider>
+    <StrictMode>
       <RouterProvider router={router} />
       <ToastContainer />
-    </AuthProvider>
-  </StrictMode>
+    </StrictMode>
+  </AuthProvider>
 );

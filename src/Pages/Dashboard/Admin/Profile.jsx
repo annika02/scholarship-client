@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import bgImg from "../../../assets/download (1).jpg";
+import bgImg from "../../../assets/cover-01.png";
 import { AuthContext } from "../../../Context/AuthProvider";
 import { toast } from "react-toastify";
 
@@ -7,12 +7,11 @@ const Profile = () => {
   const [profile, setProfile] = useState({});
   const { user } = useContext(AuthContext);
   useEffect(() => {
-    fetch(`http://localhost:5000/users/${user?.email}`)
+    fetch(`https://scholarship-server-beta.vercel.app/users/${user?.email}`)
       .then((res) => res.json())
       .then((data) => setProfile(data))
       .catch((err) => toast.error("Profile loading failed"));
   }, [user?.email]);
-  console.log(user);
   return (
     <section className="bg-[#f2f8f1] h-full py-14">
       <div className="max-w-screen-lg mx-auto">

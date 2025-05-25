@@ -1,21 +1,21 @@
-import { useContext, useState, useEffect } from "react";
+// Hooks/useRole.js
+import { useContext } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 
 const useRole = () => {
-  const [role, setRole] = useState("user");
-  const [error, setError] = useState(null);
   const { user, loader } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (user?.email) {
-      fetch(`http://localhost:5000/users/${user.email}`)
-        .then((res) => res.json())
-        .then((data) => setRole(data.role))
-        .catch((err) => setError(err));
-    }
-  }, [user?.email]);
+  let role = null;
 
-  return { user, loader, role, error };
+  if (user?.email === import.meta.env.VITE_ADMIN_EMAIL) {
+    role = "admin";
+  } else if (user?.email === import.meta.env.VITE_MODERATOR_EMAIL) {
+    role = "moderator";
+  } else if (user?.email) {
+    role = "user";
+  }
+
+  return { role, user, loader };
 };
 
 export default useRole;

@@ -1,226 +1,153 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../Context/AuthProvider";
 import { updateProfile } from "firebase/auth";
 import auth from "../../Firebase/firebase.config";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import googleImg from "../../assets/googleLogo.png";
 import useCreateUser from "../../Hooks/useCreateUser";
-
 const Register = () => {
   const { setUser, user, register, signInWithGoogle } = useContext(AuthContext);
+  const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})");
   const navigate = useNavigate();
-  const location = useLocation();
-  const [loading, setLoading] = useState(false);
-  const { createUser } = useCreateUser();
-  const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/;
-
-  // Redirect if already logged in
+  const { createUser, data, error } = useCreateUser();
+  // don't let the user come here if he's logged in
   useEffect(() => {
     if (user) {
-      navigate(location.state?.from || "/", { replace: true });
+      navigate("/");
     }
-  }, [user, navigate, location.state]);
+  }, [user]);
 
-  const handleImageUpload = async (imageFile) => {
-    const formData = new FormData();
-    formData.append("image", imageFile);
+  // email password signup
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const response = await fetch(
+    const formData = new FormData(e.target);
+    const { name, email, password, image } = Object.fromEntries(formData);
+    if (!regex.test(password)) {
+      toast.error("Password is too weak");
+      return;
+    }
+    const imageFile = new FormData();
+    imageFile.append("image", formData.get("image"));
+
+    fetch(
       "https://api.imgbb.com/1/upload?key=48b282cb34af9841dcce86814f69cd23",
       {
         method: "POST",
-        body: formData,
+        body: imageFile,
       }
-    );
-    return await response.json();
-  };
-
-  const handleRegistration = async (email, password, name, imageUrl) => {
-    const userCredential = await register(email, password);
-    await updateProfile(auth.currentUser, {
-      displayName: name,
-      photoURL: imageUrl,
-    });
-    return userCredential;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const formData = new FormData(e.target);
-      const { name, email, password, image } = Object.fromEntries(formData);
-
-      if (!PASSWORD_REGEX.test(password)) {
-        toast.error(
-          "Password must contain at least 6 characters with uppercase, lowercase and numbers"
-        );
-        return;
-      }
-
-      // Upload image
-      const imgbbData = await handleImageUpload(image);
-
-      // Register user
-      const userCredential = await handleRegistration(
-        email,
-        password,
-        name,
-        imgbbData.data.url
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        register(email, password)
+          .then((data) => {
+            updateProfile(auth.currentUser, {
+              displayName: name,
+              photoURL: res?.data?.url,
+            }).then((res) => {
+              createUser(auth.currentUser);
+              toast.success("Registered successfully");
+            });
+            setUser({
+              ...data.user,
+              email,
+              displayName: name,
+              photoURL: res.data.url,
+            });
+          })
+          .catch((err) => {
+            if (err.code === "auth/email-already-in-use") {
+              toast.error("Email already in use");
+            } else {
+              toast.error("Something went wrong");
+            }
+          });
+      })
+      .catch((err) =>
+        toast.error("Unexpected error happened. Please try again!")
       );
-
-      // Create user in database
-      await createUser(auth.currentUser);
-
-      setUser({
-        ...userCredential.user,
-        displayName: name,
-        photoURL: imgbbData.data.url,
-      });
-
-      toast.success("Registered successfully");
-      navigate(location.state?.from || "/", { replace: true });
-    } catch (error) {
-      console.error("Registration error:", error);
-
-      if (error.code === "auth/email-already-in-use") {
-        toast.error("Email already in use");
-      } else {
-        toast.error("Registration failed. Please try again");
-      }
-    } finally {
-      setLoading(false);
-    }
   };
 
-  const handleGoogleSignin = async () => {
-    setLoading(true);
-    try {
-      const userCredential = await signInWithGoogle();
-      setUser(userCredential.user);
-      await createUser(auth.currentUser);
-
-      toast.success("Registered with Google successfully");
-      navigate(location.state?.from || "/", { replace: true });
-    } catch (error) {
-      console.error("Google sign-in error:", error);
-      toast.error("Google registration failed. Please try again");
-    } finally {
-      setLoading(false);
-    }
+  // google signup
+  const handleGoogleSignin = () => {
+    signInWithGoogle()
+      .then((userCredential) => {
+        toast.success("User registered successfully");
+        setUser(userCredential.user);
+        createUser(auth.currentUser);
+        navigate("/");
+      })
+      .catch((err) => toast.error("Registration failed. Please try again"));
   };
-
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center py-20">
-      <div className="card bg-white w-full max-w-xl shadow-2xl rounded-lg overflow-hidden">
-        <div className="card-body p-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800">
-              Create New Account
-            </h2>
-            <p className="text-gray-600 mt-2">Join our community today</p>
+    <div>
+      <div className="flex py-10 justify-center items-center bg-base-200 ">
+        <div className="p-16 card bg-base-100 w-full max-w-xl shrink-0 shadow-2xl">
+          <div className="text-center pb-6 space-y-2">
+            <h2 className="text-5xl ">Create new account</h2>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-4">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Full Name</span>
-                </label>
-                <input
-                  name="name"
-                  type="text"
-                  placeholder="Enter your name"
-                  className="input input-bordered w-full"
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Email</span>
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  className="input input-bordered w-full"
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Password</span>
-                </label>
-                <input
-                  name="password"
-                  type="password"
-                  placeholder="Create a password"
-                  className="input input-bordered w-full"
-                  required
-                  disabled={loading}
-                />
-                <label className="label">
-                  <span className="label-text-alt">
-                    Must contain 6+ chars with uppercase, lowercase and numbers
-                  </span>
-                </label>
-              </div>
-
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Profile Image</span>
-                </label>
-                <input
-                  name="image"
-                  type="file"
-                  className="file-input file-input-bordered w-full"
-                  accept="image/*"
-                  required
-                  disabled={loading}
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="card-body p-0">
+            <div className="form-control">
+              <input
+                name="name"
+                type="text"
+                placeholder="Name"
+                className=" placeholder:text-[#22281E] border-b-2 border-black border-opacity-70 py-3 focus:outline-none placeholder:text-opacity-70"
+                required
+              />
             </div>
-
-            <div className="text-sm text-center">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-primary hover:underline font-medium"
-                state={{ from: location.state?.from }}
-              >
-                Login here
-              </Link>
+            <div className="form-control">
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                className=" placeholder:text-[#22281E] border-b-2 border-black border-opacity-70 py-3 focus:outline-none placeholder:text-opacity-70"
+                required
+              />
             </div>
-
-            <div className="flex flex-col space-y-4">
-              <button
-                type="submit"
-                className={`btn btn-primary text-white ${
-                  loading ? "loading" : ""
-                }`}
-                disabled={loading}
-              >
-                {loading ? "Registering..." : "Register"}
-              </button>
-
-              <div className="divider">OR</div>
-
-              <button
-                type="button"
+            <div className="form-control">
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                className="placeholder:text-[#22281E] border-b-2 border-black border-opacity-70 py-3 focus:outline-none placeholder:text-opacity-70"
+                required
+              />
+            </div>
+            <div className="form-control">
+              <input
+                name="image"
+                type="file"
+                placeholder="Select your profile photo"
+                className="placeholder:text-[#22281E] border-b-2 border-black border-opacity-70 py-3 focus:outline-none placeholder:text-opacity-70"
+                required
+              />
+            </div>
+            <div>
+              <h3 className="text-sm py-3">
+                Already have and account?{" "}
+                <Link className="hover:border-b border-black" to="/login">
+                  Login
+                </Link>
+              </h3>
+            </div>
+            <div className="flex items-center justify-center ">
+              <p
                 onClick={handleGoogleSignin}
-                className="btn btn-outline flex items-center justify-center gap-2"
-                disabled={loading}
+                className=" btn bg-white border-none shadow-none hover:bg-white max-w-max"
               >
-                <img src={googleImg} alt="Google" className="w-5 h-5" />
-                Continue with Google
+                <img className="w-8 " src={googleImg} alt="Google" />
+              </p>
+            </div>
+            <div className="form-control mt-5">
+              <button className="btn hover:bg-[#0c7d4a] bg-[#1a583c] text-white text-base">
+                Register
               </button>
             </div>
+            <p className="label-text mt-1 md:mt-3">
+              Tip: Head to the login page to sign in as an administrator.
+            </p>
           </form>
         </div>
       </div>

@@ -1,134 +1,113 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthProvider";
 import { toast } from "react-toastify";
 import googleImg from "../../assets/googleLogo.png";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCreateUser from "../../Hooks/useCreateUser";
 import auth from "../../Firebase/firebase.config";
-
 const Login = () => {
   const { login, setUser, signInWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
-  const [loading, setLoading] = useState(false);
-  const { createUser } = useCreateUser();
+  const { createUser, data, error } = useCreateUser();
 
-  // Redirect after login
-  const from = location.state?.from?.pathname || "/";
-
-  // Email/password login
-  const handleSubmit = async (e) => {
+  // email password log in
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const formData = new FormData(e.target);
-      const { email, password } = Object.fromEntries(formData);
-
-      // Login with Firebase
-      const userCredential = await login(email, password);
-      setUser(userCredential.user);
-
-      // Create/update user in your database
-      await createUser(auth.currentUser);
-
-      toast.success("Logged in successfully");
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.error("Login error:", error);
-
-      // More specific error messages
-      if (error.code === "auth/user-not-found") {
-        toast.error("No account found with this email");
-      } else if (error.code === "auth/wrong-password") {
-        toast.error("Incorrect password");
-      } else {
-        toast.error("Login failed. Please try again");
-      }
-    } finally {
-      setLoading(false);
-    }
+    const formData = new FormData(e.target);
+    const { email, password } = Object.fromEntries(formData);
+    login(email, password)
+      .then((res) => {
+        setUser(res.user);
+        createUser(auth.currentUser);
+        toast.success("Log in success");
+        navigate("/");
+      })
+      .catch((err) => toast.error("Invalid credentials"));
   };
 
-  // Google login
-  const handleGoogleSignin = async () => {
-    setLoading(true);
-    try {
-      const userCredential = await signInWithGoogle();
-      setUser(userCredential.user);
-      await createUser(auth.currentUser);
-
-      toast.success("Logged in with Google successfully");
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.error("Google login error:", error);
-      toast.error("Google login failed. Please try again");
-    } finally {
-      setLoading(false);
-    }
+  // google log in
+  const handleGoogleSignin = () => {
+    signInWithGoogle()
+      .then((userCredential) => {
+        toast.success("User registered successfully");
+        setUser(userCredential.user);
+        createUser(auth.currentUser);
+        navigate("/");
+      })
+      .catch((err) => toast.error("Registration failed. Please try again"));
   };
-
+  const handleAdminLogin = () => {
+    login(import.meta.env.VITE_ADMIN_EMAIL, import.meta.env.VITE_ADMIN_PASSWORD)
+      .then((res) => {
+        setUser(res.user);
+        createUser(auth.currentUser);
+        toast.success("Logged in as admin");
+        navigate("/");
+      })
+      .catch((err) =>
+        toast.error("Invalid credentials or Something went wrong")
+      );
+  };
+  const handleModeratorLogin = () => {
+    login(
+      import.meta.env.VITE_MODERATOR_EMAIL,
+      import.meta.env.VITE_MODERATOR_PASSWORD
+    )
+      .then((res) => {
+        setUser(res.user);
+        createUser(auth.currentUser);
+        toast.success("Logged in as moderator");
+        navigate("/");
+      })
+      .catch((err) =>
+        toast.error("Invalid credentials or Something went wrong")
+      );
+  };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200 py-20">
-      <div className="card bg-base-100 w-full max-w-md shadow-2xl">
-        <div className="card-body p-8">
-          <h2 className="text-3xl font-bold text-center mb-6">Welcome Back</h2>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <div>
+      <div className="flex py-20 justify-center items-center bg-base-200 ">
+        <div className="p-16 card bg-base-100 w-full max-w-xl shrink-0 shadow-2xl">
+          <div>
+            <h2 className="text-center text-5xl p-2"> Welcome Back </h2>
+          </div>
+          <form onSubmit={handleSubmit} className="card-body p-0">
             <div className="form-control">
               <input
                 name="email"
                 type="email"
                 placeholder="Email"
-                className="input input-bordered focus:border-primary focus:ring-1 focus:ring-primary"
+                className=" placeholder:text-[#22281E] border-b-2 border-black border-opacity-70 py-3 focus:outline-none placeholder:text-opacity-70"
                 required
-                disabled={loading}
               />
             </div>
-
             <div className="form-control">
               <input
                 name="password"
                 type="password"
                 placeholder="Password"
-                className="input input-bordered focus:border-primary focus:ring-1 focus:ring-primary"
+                className="placeholder:text-[#22281E] border-b-2 border-black border-opacity-70 py-3 focus:outline-none placeholder:text-opacity-70"
                 required
-                disabled={loading}
               />
             </div>
-
-            <div className="text-sm text-center pt-2">
-              New to this website?{" "}
-              <Link
-                to="/register"
-                className="text-primary hover:underline font-medium"
-                state={{ from: location.state?.from }}
-              >
-                Register now
-              </Link>
+            <div>
+              <h3 className="text-sm py-3">
+                New to this website?{" "}
+                <Link className="hover:border-b border-black" to="/register">
+                  Register now
+                </Link>
+              </h3>
             </div>
-
-            <div className="divider">OR</div>
-
-            <button
-              type="button"
-              onClick={handleGoogleSignin}
-              className="btn btn-outline w-full flex items-center justify-center gap-2"
-              disabled={loading}
-            >
-              <img className="w-5" src={googleImg} alt="Google" />
-              Continue with Google
-            </button>
-
-            <div className="form-control mt-6">
-              <button
-                type="submit"
-                className={`btn btn-primary text-white ${
-                  loading ? "loading" : ""
-                }`}
-                disabled={loading}
+            <div className="flex items-center justify-center ">
+              <p
+                onClick={handleGoogleSignin}
+                className=" btn bg-white border-none shadow-none hover:bg-white max-w-max"
               >
-                {loading ? "Logging in..." : "Login"}
+                <img className="w-8 " src={googleImg} alt="Google" />
+              </p>
+            </div>
+            <div className="form-control mt-6">
+              <button className="btn hover:bg-[#0c5b7d] bg-[#1a4c58] text-white text-base">
+                Login
               </button>
             </div>
           </form>

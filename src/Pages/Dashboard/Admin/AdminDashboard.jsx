@@ -6,15 +6,15 @@ import { FaBook, FaList, FaUserCircle, FaUsers } from "react-icons/fa";
 import useRole from "../../../Hooks/useRole";
 import { FaPenToSquare } from "react-icons/fa6";
 import { BiSolidCommentDetail } from "react-icons/bi";
-import dashboardBg from "../../../assets/download (2).jpg";
-
+import dashboardBg from "../../../assets/dashboard-bg.avif";
+import { RiBarChartBoxFill } from "react-icons/ri";
 const Admin = () => {
   const { role } = useRole();
   return (
     <>
       <Navbar />
-      <section className="flex justify-center h-[80vh]">
-        <aside className="w-[20%]  border-r-2 pt-5h-[calc(100vh-70px)]   ">
+      <section className="flex justify-center">
+        <aside className=" w-[20%] border-r-2 pt-5h-[calc(100vh-70px)]   ">
           <h1
             style={{
               backgroundImage: `url('${dashboardBg}')`,
@@ -22,7 +22,7 @@ const Admin = () => {
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
             }}
-            className="text-4xl py-5 mb-5 font-bold text-center text-white max-h-max w-full"
+            className="hidden md:block md:text-4xl text-2xl py-5 mb-5 font-bold text-center text-white max-h-max w-full"
           >
             {" "}
             Dashboard
@@ -34,7 +34,7 @@ const Admin = () => {
                 to="profile"
               >
                 <FaUserCircle />
-                Profile
+                <span className="hidden md:block">Profile</span>
               </NavLink>
             </li>
             <li>
@@ -43,7 +43,7 @@ const Admin = () => {
                 to="add-scholarships"
               >
                 <FaPenToSquare />
-                Add Scholarships
+                <span className="hidden md:block">Add Scholarships</span>
               </NavLink>
             </li>
             <li>
@@ -52,7 +52,7 @@ const Admin = () => {
                 to="/dashboard/manage-scholarships"
               >
                 <FaList></FaList>
-                Manage Scholarships
+                <span className="hidden md:block">Manage Scholarships</span>
               </NavLink>
             </li>
             <li>
@@ -61,7 +61,7 @@ const Admin = () => {
                 to="/dashboard/manage-applications"
               >
                 <FaBook></FaBook>
-                Manage Applications
+                <span className="hidden md:block">Manage Applications</span>
               </NavLink>
             </li>
             <li>
@@ -70,7 +70,7 @@ const Admin = () => {
                 to="/dashboard/manage-users"
               >
                 <FaUsers></FaUsers>
-                All Users
+                <span className="hidden md:block">All Users</span>
               </NavLink>
             </li>
             <li>
@@ -79,7 +79,16 @@ const Admin = () => {
                 to="manage-reviews"
               >
                 <BiSolidCommentDetail />
-                Reviews
+                <span className="hidden md:block">Reviews</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="flex py-2 px-5 rounded-full items-center gap-2"
+                to="analytics"
+              >
+                <RiBarChartBoxFill />
+                <span className="hidden md:block">Analytics</span>
               </NavLink>
             </li>
           </ul>

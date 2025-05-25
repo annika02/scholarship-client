@@ -91,8 +91,8 @@ const ScholarshipsCard = ({ scholarship }) => {
             >
               <ReactStars
                 count={5}
-                size={22}
                 edit={false}
+                size={22}
                 value={4.5}
                 isHalf={true}
                 activeColor="#ffd700"
