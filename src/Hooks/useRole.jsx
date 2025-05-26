@@ -15,7 +15,7 @@ const useRole = () => {
     role = "user";
   }
 
-  return { role, user, loader };
+  return { role, user, userId: user?.uid, loader };
 };
 
 export default useRole;
