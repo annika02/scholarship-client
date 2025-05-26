@@ -152,7 +152,13 @@ const AddScholarships = () => {
                   </option>
                   <option value="Agriculture">Agriculture</option>
                   <option value="Engineering">Engineering</option>
-                  <option value="Doctor">Doctor</option>
+                  <option value="Medical">Medical</option>
+                  <option value="Business">Business</option>
+                  <option value="Political Science">Political Science</option>
+                  <option value="Arts">Arts</option>
+                  <option value="Environmental Science">
+                    Environmental Science
+                  </option>
                 </select>
               </label>
               <label className="form-control w-[300px]">
@@ -189,6 +195,7 @@ const AddScholarships = () => {
                   <option value="Diploma">Diploma</option>
                   <option value="Bachelor">Bachelor</option>
                   <option value="Masters">Masters</option>
+                  <option value="Masters">PhD</option>
                 </select>
               </label>
               <label className="form-control w-[300px]">

@@ -105,7 +105,7 @@ const Navbar = () => {
             <div className="navbar-end max-w-max lg:flex">
               <Link
                 to={"/register"}
-                className="btn  hover:bg-[#0c5b7d] bg-[#1a4c58] text-white text-base"
+                className="btn  hover:bg-[#96d7ff] bg-[#1a4c58] text-white text-base"
               >
                 Register
               </Link>
