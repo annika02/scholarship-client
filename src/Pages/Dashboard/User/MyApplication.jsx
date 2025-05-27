@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { BiSolidMessageEdit } from "react-icons/bi";
 import { FaPen } from "react-icons/fa";
 import { FcCancel } from "react-icons/fc";
-import ReactStars from "react-rating-stars-component";
+import { FaStar } from "react-icons/fa"; // Custom star rating
 
 const MyApplication = () => {
   const { userId, loading, user } = useRole();
@@ -20,25 +20,19 @@ const MyApplication = () => {
       )
         .then((res) => res.json())
         .then((res) => setData(res))
-        .catch((err) => {
-          toast.error("Something bad happen. Please try again!");
-        });
+        .catch((err) => toast.error("Something bad happen. Please try again!"));
     }
   }, [loading, userId, refetch]);
 
   const handleDelete = (id) => {
     fetch(
       `https://scholarship-server-beta.vercel.app/delete-application/${id}`,
-      {
-        method: "DELETE",
-      }
+      { method: "DELETE" }
     )
       .then((res) => res.json())
-      .then((res) => {
-        if (res.deletedCount > 0) {
-          toast.success("Deleted successfully");
-        }
-      })
+      .then(
+        (res) => res.deletedCount > 0 && toast.success("Deleted successfully")
+      )
       .catch((err) => toast.error("Deleted unsuccessful. Please try again!"));
     setRefetch(!refetch);
   };
@@ -52,20 +46,15 @@ const MyApplication = () => {
 
     fetch(
       "https://api.imgbb.com/1/upload?key=48b282cb34af9841dcce86814f69cd23",
-      {
-        method: "POST",
-        body: imageFile,
-      }
+      { method: "POST", body: imageFile }
     )
       .then((res) => res.json())
-      .then((res) => {
+      .then((res) =>
         fetch(
           `https://scholarship-server-beta.vercel.app/update-application/${modalData?._id}`,
           {
             method: "PATCH",
-            headers: {
-              "content-type": "application/json",
-            },
+            headers: { "content-type": "application/json" },
             body: JSON.stringify({ ...data, image: res.data.url }),
           }
         )
@@ -77,12 +66,12 @@ const MyApplication = () => {
               setRefetch(!refetch);
             }
           })
-          .catch((err) => {
+          .catch((err) =>
             toast.error(
               "Something bad happened while updating the data. Please try again!"
-            );
-          });
-      })
+            )
+          )
+      )
       .catch((err) =>
         toast.error(
           "Something bad happened while uploading the image. Please try again!"
@@ -120,13 +109,10 @@ const MyApplication = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        if (data.insertedId) {
-          toast.success("Review added successfully");
-        }
+        if (data.insertedId) toast.success("Review added successfully");
         document.getElementById("my_modal_4").checked = false;
       })
       .catch((err) => toast.error("Something went wrong"));
-
     e.target.reset();
   };
 
@@ -152,57 +138,53 @@ const MyApplication = () => {
             </thead>
             <tbody>
               {data.map((item) => (
-                <>
-                  <tr>
-                    <td className="border">{item.universityName}</td>
-                    <td className="border">{item.universityAddress}</td>
-                    <td className="border">{item.feedback}</td>
-                    <td className="border">{item.subjectCategory}</td>
-                    <td className="border">{item.degree}</td>
-                    <td className="border">{item.applicationFees}</td>
-                    <td className="border">{item.serviceCharge}</td>
-                    <td>
-                      {item.status === "Pending" ? (
-                        <span className="text-white bg-yellow-500 px-2 py-1 rounded-xl">
-                          {item.status}
-                        </span>
-                      ) : item.status === "Rejected" ? (
-                        <span className="text-white bg-red-500 px-2 py-1 rounded-xl">
-                          {item.status}
-                        </span>
-                      ) : (
-                        item.status === "Approved" && (
-                          <span className="text-white bg-green-500 px-2 py-1 rounded-xl">
-                            {item.status}
-                          </span>
-                        )
-                      )}
-                    </td>
-                    <td className="border flex">
-                      <label
-                        onClick={() => setModalData(item)}
-                        htmlFor="my_modal_4"
-                        className="btn btn-ghost btn-xs"
-                      >
-                        <BiSolidMessageEdit />
-                      </label>
-                      <label
-                        disabled={item.status !== "Pending"}
-                        onClick={() => setModalData(item)}
-                        htmlFor={"my_modal_9"}
-                        className={` btn disabled btn-ghost btn-xs`}
-                      >
-                        <FaPen />
-                      </label>
-                      <button
-                        onClick={() => handleDelete(item._id)}
-                        className={` btn btn-ghost text-red-600 btn-xs`}
-                      >
-                        <FcCancel />
-                      </button>
-                    </td>
-                  </tr>
-                </>
+                <tr key={item._id}>
+                  <td className="border">{item.universityName}</td>
+                  <td className="border">{item.universityAddress}</td>
+                  <td className="border">{item.feedback}</td>
+                  <td className="border">{item.subjectCategory}</td>
+                  <td className="border">{item.degree}</td>
+                  <td className="border">{item.applicationFees}</td>
+                  <td className="border">{item.serviceCharge}</td>
+                  <td>
+                    {item.status === "Pending" ? (
+                      <span className="text-white bg-yellow-500 px-2 py-1 rounded-xl">
+                        {item.status}
+                      </span>
+                    ) : item.status === "Rejected" ? (
+                      <span className="text-white bg-red-500 px-2 py-1 rounded-xl">
+                        {item.status}
+                      </span>
+                    ) : (
+                      <span className="text-white bg-green-500 px-2 py-1 rounded-xl">
+                        {item.status}
+                      </span>
+                    )}
+                  </td>
+                  <td className="border flex">
+                    <label
+                      onClick={() => setModalData(item)}
+                      htmlFor="my_modal_4"
+                      className="btn btn-ghost btn-xs"
+                    >
+                      <BiSolidMessageEdit />
+                    </label>
+                    <label
+                      disabled={item.status !== "Pending"}
+                      onClick={() => setModalData(item)}
+                      htmlFor="my_modal_9"
+                      className={`btn disabled btn-ghost btn-xs`}
+                    >
+                      <FaPen />
+                    </label>
+                    <button
+                      onClick={() => handleDelete(item._id)}
+                      className="btn btn-ghost text-red-600 btn-xs"
+                    >
+                      <FcCancel />
+                    </button>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>
@@ -214,29 +196,24 @@ const MyApplication = () => {
           </div>
         )}
 
-        {/* Update modal */}
         <input type="checkbox" id="my_modal_9" className="modal-toggle" />
         <div className="modal" role="dialog">
           <form
             onSubmit={handleUpdate}
             className="modal-box rounded-xl max-w-2xl bg-white space-y-2"
           >
-            <div>
-              <h2 className="text-center text-3xl font-bold mb-7">
-                Please fill out this form
-              </h2>
-            </div>
+            <h2 className="text-center text-3xl font-bold mb-7">
+              Please fill out this form
+            </h2>
             <h4 className="text-sm">
               Required fields are marked as{" "}
               <span className="text-red-600">*</span>
             </h4>
             <div className="flex gap-5 justify-center">
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">
-                    Phone number <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  Phone number <span className="text-red-600">*</span>
+                </span>
                 <input
                   defaultValue={modalData?.phoneNumber || ""}
                   required
@@ -247,11 +224,9 @@ const MyApplication = () => {
                 />
               </label>
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">
-                    Your photo <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  Your photo <span className="text-red-600">*</span>
+                </span>
                 <input
                   required
                   name="image"
@@ -263,27 +238,22 @@ const MyApplication = () => {
             </div>
             <div className="flex gap-5 justify-center">
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">
-                    Gender <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  Gender <span className="text-red-600">*</span>
+                </span>
                 <select
                   defaultValue={modalData?.gender || ""}
                   name="gender"
                   className="input input-bordered w-full max-w-xs"
-                  id=""
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
               </label>
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">
-                    Address <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  Address <span className="text-red-600">*</span>
+                </span>
                 <input
                   defaultValue={modalData?.address || ""}
                   required
@@ -296,11 +266,9 @@ const MyApplication = () => {
             </div>
             <div className="flex gap-5 justify-center">
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">
-                    HSC result <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  HSC result <span className="text-red-600">*</span>
+                </span>
                 <input
                   defaultValue={modalData?.hscResult || ""}
                   min={1}
@@ -314,11 +282,9 @@ const MyApplication = () => {
                 />
               </label>
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">
-                    SSC result <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  SSC result <span className="text-red-600">*</span>
+                </span>
                 <input
                   defaultValue={modalData?.sscResult || ""}
                   min={1}
@@ -334,16 +300,13 @@ const MyApplication = () => {
             </div>
             <div className="flex gap-5 justify-center">
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">
-                    Applying Degree <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  Applying Degree <span className="text-red-600">*</span>
+                </span>
                 <select
                   defaultValue={modalData?.degree || ""}
                   className="input input-bordered w-full max-w-xs"
                   name="degree"
-                  id=""
                 >
                   <option value="Diploma">Diploma</option>
                   <option value="Bachelor">Bachelor</option>
@@ -351,14 +314,11 @@ const MyApplication = () => {
                 </select>
               </label>
               <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">Study gap</span>
-                </div>
+                <span className="label-text">Study gap</span>
                 <select
                   defaultValue={modalData?.studyGap}
                   className="input input-bordered w-full max-w-xs"
                   name="studyGap"
-                  id=""
                 >
                   <option disabled value="none">
                     Select your study gap
@@ -375,17 +335,15 @@ const MyApplication = () => {
                 data-tip="Read Only"
                 className="tooltip tooltip-error hover:tooltip-open form-control w-full max-w-xs"
               >
-                <div className="label">
-                  <span className="label-text">
-                    University name <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  University name <span className="text-red-600">*</span>
+                </span>
                 <input
                   required
                   value={modalData?.universityName || ""}
                   name="universityName"
                   type="text"
-                  placeholder="Type here"
+                  readOnly
                   className="input input-bordered w-full max-w-xs"
                 />
               </label>
@@ -393,37 +351,33 @@ const MyApplication = () => {
                 data-tip="Read Only"
                 className="tooltip tooltip-error hover:tooltip-open form-control w-full max-w-xs"
               >
-                <div className="label">
-                  <span className="label-text">
-                    Scholarship category <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  Scholarship category <span className="text-red-600">*</span>
+                </span>
                 <input
                   required
                   value={modalData?.scholarshipCategory || ""}
                   name="scholarshipCategory"
                   type="text"
-                  placeholder="Type here"
+                  readOnly
                   className="input input-bordered w-full max-w-xs"
                 />
               </label>
             </div>
-            <div className=" flex gap-5 justify-center">
+            <div className="flex gap-5 justify-center">
               <label
                 data-tip="Read Only"
                 className="tooltip tooltip-error hover:tooltip-open form-control w-full max-w-xs"
               >
-                <div className="label">
-                  <span className="label-text">
-                    Subject Category <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  Subject Category <span className="text-red-600">*</span>
+                </span>
                 <input
                   required
                   value={modalData?.subjectCategory || ""}
                   name="subjectCategory"
                   type="text"
-                  placeholder="Type here"
+                  readOnly
                   className="input input-bordered w-full max-w-xs"
                 />
               </label>
@@ -431,17 +385,15 @@ const MyApplication = () => {
                 data-tip="Read Only"
                 className="tooltip tooltip-error hover:tooltip-open form-control w-full max-w-xs"
               >
-                <div className="label">
-                  <span className="label-text">
-                    University address <span className="text-red-600">*</span>
-                  </span>
-                </div>
+                <span className="label-text">
+                  University address <span className="text-red-600">*</span>
+                </span>
                 <input
                   required
-                  name="universityAddress"
                   value={modalData?.universityAddress || ""}
+                  name="universityAddress"
                   type="text"
-                  placeholder="Type here"
+                  readOnly
                   className="input input-bordered w-full max-w-xs"
                 />
               </label>
@@ -451,8 +403,8 @@ const MyApplication = () => {
                 Submit
               </button>
               <label
-                className="btn transition duration-300 hover:bg-[#b12c2c] hover:text-[#ffffff] bg-[#ff2525] text-white px-7"
                 htmlFor="my_modal_9"
+                className="btn transition duration-300 hover:bg-[#b12c2c] hover:text-[#ffffff] bg-[#ff2525] text-white px-7"
               >
                 close
               </label>
@@ -460,16 +412,13 @@ const MyApplication = () => {
           </form>
         </div>
 
-        {/* Review modal */}
         <input type="checkbox" id="my_modal_4" className="modal-toggle" />
         <div className="modal" role="dialog">
           <div className="modal-box">
             <form onSubmit={handleReview} className="space-y-5 my-6">
-              <div className="flex justify-center">
-                <h2 className="border-b-2 border-[black] max-w-max px-2 text-center text-2xl mb-5">
-                  Add Review
-                </h2>
-              </div>
+              <h2 className="border-b-2 border-[black] max-w-max px-2 text-center text-2xl mb-5">
+                Add Review
+              </h2>
               <div className="flex gap-5">
                 <label className="form-control text-start w-full max-w-xs">
                   <span className="label-text">Your name</span>
@@ -480,21 +429,22 @@ const MyApplication = () => {
                     className="input input-bordered"
                     type="text"
                     name="name"
-                    id=""
                   />
                 </label>
                 <label className="form-control text-start w-full max-w-xs">
                   <span className="label-text">Ratings</span>
                   <div className="input flex items-center input-bordered">
-                    {" "}
-                    <ReactStars
-                      count={5}
-                      size={22}
-                      onChange={setRatings}
-                      value={modalData.ratings}
-                      isHalf={true}
-                      activeColor="#ffd700"
-                    />
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <FaStar
+                          key={star}
+                          size={22}
+                          color={star <= ratings ? "#ffd700" : "#e4e5e9"}
+                          onClick={() => setRatings(star)}
+                          style={{ cursor: "pointer", marginRight: "5px" }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </label>
               </div>
@@ -505,16 +455,15 @@ const MyApplication = () => {
                   placeholder="Give a review"
                   className="w-full rounded-lg h-20 p-3 input input-bordered"
                   name="review"
-                  id=""
-                ></textarea>
+                />
               </label>
               <div className="flex justify-center items-center gap-5 !mt-7">
                 <button className="btn transition duration-300 hover:bg-[#96d7ff] hover:text-[#143145] bg-[#1a4c58] text-white px-7">
                   Submit
                 </button>
                 <label
-                  className="btn transition duration-300 hover:bg-[#b12c2c] hover:text-[#ffffff] bg-[#ff2525] text-white px-7"
                   htmlFor="my_modal_4"
+                  className="btn transition duration-300 hover:bg-[#b12c2c] hover:text-[#ffffff] bg-[#ff2525] text-white px-7"
                 >
                   close
                 </label>

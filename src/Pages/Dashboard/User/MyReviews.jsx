@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash, FaStar } from "react-icons/fa";
 import { useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
-import ReactStars from "react-rating-stars-component";
 
 const MyReviews = () => {
   const [ratings, setRating] = useState(0);
   const loaderData = useLoaderData();
   const [data, setData] = useState(loaderData);
+
   const handleDelete = (id) => {
     fetch(`https://scholarship-server-beta.vercel.app/delete-review/${id}`, {
       method: "DELETE",
@@ -39,6 +39,10 @@ const MyReviews = () => {
       .then((res) => res.json())
       .then((res) => {
         if (res.modifiedCount > 0) {
+          // Update the local state to reflect the new rating and review
+          const updatedData = [...data]; // Use the current data state
+          updatedData[idx] = { ...updatedData[idx], ...data, ratings };
+          setData(updatedData);
           toast.success("Update successfully");
         }
       })
@@ -51,7 +55,6 @@ const MyReviews = () => {
       <div className="overflow-x-auto mx-auto max-w-screen-lg">
         {data.length > 0 ? (
           <table className="table text-center">
-            {/* head */}
             <thead>
               <tr>
                 <th className="border-2 border-gray-300">Ratings</th>
@@ -63,19 +66,20 @@ const MyReviews = () => {
               </tr>
             </thead>
             <tbody>
-              {/* row 1 */}
               {data.map((item, idx) => (
-                <>
-                  <tr key={item._id}>
+                <React.Fragment key={item._id}>
+                  <tr>
                     <th className="border">
-                      <ReactStars
-                        count={5}
-                        size={16}
-                        edit={false}
-                        value={item.ratings}
-                        isHalf={true}
-                        activeColor="#ffd700"
-                      />
+                      <div className="flex justify-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <FaStar
+                            key={star}
+                            size={16}
+                            color={star <= item.ratings ? "#ffd700" : "#e4e5e9"}
+                            style={{ marginRight: "5px" }}
+                          />
+                        ))}
+                      </div>
                     </th>
                     <td className="border">{item?.scholarshipName}</td>
                     <td className="border">{item?.universityName}</td>
@@ -83,6 +87,7 @@ const MyReviews = () => {
                     <td className="border">{item?.date}</td>
                     <td className="border">
                       <label
+                        onClick={() => setRating(item.ratings)}
                         htmlFor={`my_modal_${idx}`}
                         className="btn btn-ghost btn-xs"
                       >
@@ -96,7 +101,6 @@ const MyReviews = () => {
                       </button>
                     </td>
                   </tr>
-                  {/* Put this part before </body> tag */}
                   <input
                     type="checkbox"
                     id={`my_modal_${idx}`}
@@ -120,7 +124,7 @@ const MyReviews = () => {
                             />
                           </label>
                           <label
-                            data-tip="You can't this information"
+                            data-tip="You can't edit this information"
                             className="form-control text-start tooltip tooltip-error w-full max-w-xs"
                           >
                             <span className="label-text">
@@ -131,13 +135,14 @@ const MyReviews = () => {
                               value={item.scholarshipName}
                               type="text"
                               placeholder="Type here"
+                              readOnly
                               className="input input-bordered w-full max-w-xs"
                             />
                           </label>
                         </div>
                         <div className="col-span-1 flex flex-col gap-5">
                           <label
-                            data-tip="You can't this information"
+                            data-tip="You can't edit this information"
                             className="form-control text-start tooltip tooltip-error w-full tooltip-bottom max-w-xs"
                           >
                             <span className="label-text">University name</span>
@@ -146,21 +151,29 @@ const MyReviews = () => {
                               value={item.universityName}
                               type="text"
                               placeholder="Type here"
+                              readOnly
                               className="input input-bordered w-full max-w-xs"
                             />
                           </label>
                           <label className="form-control text-start w-full max-w-xs">
                             <span className="label-text">Ratings</span>
                             <div className="input flex items-center input-bordered">
-                              {" "}
-                              <ReactStars
-                                count={5}
-                                size={22}
-                                onChange={setRating}
-                                value={item.ratings}
-                                isHalf={true}
-                                activeColor="#ffd700"
-                              />
+                              <div className="flex">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <FaStar
+                                    key={star}
+                                    size={22}
+                                    color={
+                                      star <= ratings ? "#ffd700" : "#e4e5e9"
+                                    }
+                                    onClick={() => setRating(star)}
+                                    style={{
+                                      cursor: "pointer",
+                                      marginRight: "5px",
+                                    }}
+                                  />
+                                ))}
+                              </div>
                             </div>
                           </label>
                         </div>
@@ -190,7 +203,7 @@ const MyReviews = () => {
                       </div>
                     </form>
                   </div>
-                </>
+                </React.Fragment>
               ))}
             </tbody>
           </table>
