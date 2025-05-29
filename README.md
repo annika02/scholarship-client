@@ -1,59 +1,122 @@
-# Scholarship Hub
+# 🎓 Scholarship Hub Frontend
 
-**Scholarship Hub** is a web application designed to streamline the scholarship application process for students. It allows users to manage their scholarship applications, submit reviews, explore opportunities, and track application statuses through an intuitive dashboard. Built with React and hosted on Firebase, it integrates with a Vercel-hosted backend API for seamless data management.
+**Scholarship Hub** is a modern web application designed to streamline the scholarship application process for students. It enables users to discover scholarships, manage applications, submit reviews, and track statuses—all through an intuitive dashboard.
 
-## Live Links
+Built with **React** and styled using **Tailwind CSS**, the frontend is integrated with Firebase for authentication and Vercel for backend API support.
 
-- **Frontend**: [https://assignment12-ae127.web.app/](https://assignment12-ae127.web.app/)
-- **Backend API**: [https://scholarship-server-beta.vercel.app/](https://scholarship-server-beta.vercel.app/)
+---
 
-## Features
+## 🌐 Live Links
 
-- **User Authentication**: Secure login and role-based access using Firebase Authentication and a custom `useRole` hook.
-- **Application Management**:
-  - View a list of submitted applications with details like university name, address, subject, degree, fees, and status (Pending, Approved, Rejected).
-  - Add, update, or delete applications with form validation and image uploads via ImgBB API.
-  - Edit application details (e.g., phone number, address, photo) for "Pending" applications.
-- **Review System**:
-  - Add reviews for scholarships with a custom star rating system (1-5 stars) and comments.
-  - Update or delete existing reviews with immediate table updates.
-  - Display reviews with ratings, scholarship titles, university names, and dates.
-- **Scholarship Exploration**:
-  - Browse a list of scholarship opportunities with details like university, scholarship name, degree, funding type, and application dates.
-  - **Search Functionality**: Use a search bar to find scholarships by keywords and a "Search by Category" dropdown to filter by scholarship name, university name, or degree name.
-- **Real-time Data Updates**: Fetch and update data dynamically using the backend API.
-- **Responsive Design**: Optimized for desktop and mobile with Tailwind CSS.
-- **Toast Notifications**: Feedback on actions (e.g., updates, deletions) using `react-toastify`.
+- 🔗 **Frontend**: [https://assignment12-ae127.web.app](https://assignment12-ae127.web.app)
+- 🔗 **Backend API**: [https://scholarship-server-beta.vercel.app](https://scholarship-server-beta.vercel.app)
 
-## Technologies Used
+---
 
-- **Frontend**:
-  - React
-  - React Router (for navigation)
-  - React Icons (for custom star ratings and icons)
-  - Tailwind CSS (styling)
-  - Firebase Authentication
-  - Firebase Hosting
-- **Backend**:
-  - Node.js (assumed based on Vercel hosting)
-  - Vercel (API hosting)
-- **API Integration**:
-  - Fetch API for CRUD operations
-  - ImgBB API for image uploads
-- **Notifications**: `react-toastify`
+## ✨ Features
 
-## Prerequisites
+### 🔐 User Authentication
 
-- Node.js (v14 or higher)
+- Firebase Authentication (Google login)
+- Role-based access using a custom `useRole` hook
+
+### 📄 Application Management
+
+- List applications with detailed info: university, subject, degree, fees, status
+- Add new applications with image uploads (via **ImgBB API**)
+- Edit or delete applications (edit restricted to "Pending" ones)
+- Input validations and responsive form handling
+
+### ⭐ Review System
+
+- Add reviews for scholarships (1-5 star custom rating)
+- Update and delete reviews with dynamic table updates
+- Display reviews with rating, scholarship title, university, and date
+
+### 🎓 Scholarship Exploration
+
+- Browse a list of available scholarships
+- Rich search: filter by **keyword** or **category** (scholarship name, university, degree)
+- Detailed scholarship cards with funding info and dates
+
+### 🔁 Real-time Data Interaction
+
+- Seamless integration with backend API
+- Dynamic state updates for CRUD actions
+
+### 📱 Responsive Design
+
+- Mobile-friendly interface using **Tailwind CSS**
+
+### 🔔 Toast Notifications
+
+- User feedback for all actions via `react-toastify`
+
+---
+
+## 🛠️ Technologies Used
+
+| Layer        | Technologies                                      |
+| ------------ | ------------------------------------------------- |
+| **Frontend** | React, React Router, React Icons, Tailwind CSS    |
+| **Backend**  | Node.js (Vercel-hosted API)                       |
+| **Auth**     | Firebase Authentication                           |
+| **Hosting**  | Firebase Hosting (Frontend), Vercel (Backend API) |
+| **Uploads**  | ImgBB API for image uploads                       |
+| **UX/UI**    | Toasts via `react-toastify`, responsive layouts   |
+
+---
+
+## 📦 Prerequisites
+
+- Node.js v14 or later
 - npm or yarn
-- Firebase account (for authentication and hosting)
-- Vercel account (for backend API hosting)
-- ImgBB API key (for image uploads)
+- Firebase account (for auth & hosting)
+- Vercel account (for backend deployment)
+- ImgBB API key
 
-## Installation
+---
 
-1. **Clone the Repository**:
+## 🚀 Getting Started
+
+1. **Clone the Repository**
+
    ```bash
    git clone <your-repo-url>
    cd scholarship-hub
    ```
+
+2. **Install Dependencies**
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Setup Environment Variables**
+
+   - Firebase config
+   - ImgBB API key
+   - Backend API base URL
+
+4. **Run the Development Server**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a branch: `git checkout -b feature-name`
+3. Make your changes and commit: `git commit -m "Add feature"`
+4. Push to your fork: `git push origin feature-name`
+5. Submit a Pull Request
+
+---
+
+## 📄 License
+
+Licensed under the **MIT License**. See `LICENSE` for more info.
